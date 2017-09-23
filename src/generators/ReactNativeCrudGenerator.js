@@ -4,7 +4,7 @@ import fs from 'fs';
 import urlapi from 'url';
 import chalk from 'chalk';
 
-export default class ReactCrudGenerator {
+export default class ReactNativeCrudGenerator {
   templates = {};
 
   constructor({hydraPrefix, templateDirectory}) {
@@ -39,18 +39,12 @@ export default class ReactCrudGenerator {
     this.registerTemplate(templatePathCommon, 'reducers/foo/update.js');
     this.registerTemplate(templatePathCommon, 'reducers/foo/show.js');
 
-    // routes
-    this.registerTemplate(templatePath, 'routes/foo.js');
-
     // entrypoint
     this.registerTemplate(templatePathCommon, 'api/_entrypoint.js');
-
-    // utils
-    this.registerTemplate(templatePath, 'utils/helpers.js');
   }
 
   registerTemplate(templatePath, path) {
-    this.templates[path] = handlebars.compile(fs.readFileSync(templatePath + path).toString());
+    this.templates[path] = handlebars.compile(fs.readFileSync(templatePath+path).toString());
   }
 
   help(resource) {
@@ -62,14 +56,8 @@ export default class ReactCrudGenerator {
 // import reducers
 import ${titleLc} from './reducers/${titleLc}/';
 
-//import routes
-import ${titleLc}Routes from './routes/${titleLc}';
-
 // Add the reducer
 combineReducers(${titleLc},{/* ... */}),
-
-// Add routes to <Switch>
-{ ${titleLc}Routes }
 `));
   }
 
@@ -92,8 +80,6 @@ combineReducers(${titleLc},{/* ... */}),
     // Create directories
     // These directories may already exist
     mkdirp.sync(`${dir}/api`);
-    mkdirp.sync(`${dir}/routes`);
-    mkdirp.sync(`${dir}/utils`);
 
     this.createDir(`${dir}/actions/${lc}`);
     this.createDir(`${dir}/components/${lc}`);
@@ -124,9 +110,6 @@ combineReducers(${titleLc},{/* ... */}),
     this.createFile('reducers/foo/list.js', `${dir}/reducers/${lc}/list.js`, context);
     this.createFile('reducers/foo/update.js', `${dir}/reducers/${lc}/update.js`, context);
     this.createFile('reducers/foo/show.js', `${dir}/reducers/${lc}/show.js`, context);
-
-    // routes
-    this.createFile('routes/foo.js', `${dir}/routes/${lc}.js`, context)
   }
 
   entrypoint(apiEntry, dir) {
@@ -140,10 +123,6 @@ combineReducers(${titleLc},{/* ... */}),
     }
 
     this.createFile('api/_entrypoint.js', `${dir}/api/_entrypoint.js`, context);
-  }
-
-  utils(dir) {
-    this.createFile('utils/helpers.js', `${dir}/utils/helpers.js`, null);
   }
 
   getInputTypeFromField(field) {

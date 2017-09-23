@@ -3,11 +3,11 @@ import Resource from 'api-doc-parser/lib/Resource';
 import Field from 'api-doc-parser/lib/Field';
 import fs from 'fs';
 import tmp from 'tmp';
-import ReactCrudGenerator from './ReactCrudGenerator';
+import ReactNativeCrudGenerator from './ReactNativeCrudGenerator';
 
 
 test('Generate a React app', () => {
-  const generator = new ReactCrudGenerator({hydraPrefix: 'hydra:', templateDirectory: `${__dirname}/../../templates`});
+  const generator = new ReactNativeCrudGenerator({hydraPrefix: 'hydra:', templateDirectory: `${__dirname}/../../templates`});
   const tmpobj = tmp.dirSync({unsafeCleanup: true});
 
   const fields = [new Field('bar', {

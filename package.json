@@ -1,6 +1,6 @@
 {
-  "name": "api-platform-generate-crud",
-  "version": "0.1.6",
+  "name": "@api-platform/client-generator",
+  "version": "0.1.10",
   "description": "Generate a CRUD application built with React, Redux and React Router from an Hydra-enabled API",
   "files": [
     "*.md",
@@ -10,9 +10,9 @@
     "templates"
   ],
   "main": "lib/index",
-  "repository": "api-platform/generate-crud",
-  "homepage": "https://github.com/api-platform/generate-crud",
-  "bugs": "https://github.com/api-platform/generate-crud/issues",
+  "repository": "api-platform/client-generator",
+  "homepage": "https://github.com/api-platform/client-generator",
+  "bugs": "https://github.com/api-platform/client-generator/issues",
   "author": "Kévin Dunglas",
   "license": "MIT",
   "devDependencies": {
@@ -30,7 +30,7 @@
     "tmp": "^0.0.31"
   },
   "dependencies": {
-    "api-doc-parser": "^0.1.1",
+    "api-doc-parser": "^0.2",
     "babel-runtime": "^6.23.0",
     "chalk": "^2.1.0",
     "commander": "^2.9.0",
@@ -43,9 +43,13 @@
     "lint": "eslint src",
     "build": "babel src -d lib --ignore '*.test.js'",
     "watch": "babel --watch src -d lib --ignore '*.test.js'",
-    "test-gen": "rm -rf ./tmp && npm run build && ./lib/index.js  https://demo.api-platform.com ./tmp"
+    "test-gen": "rm -rf ./tmp && npm run build && ./lib/index.js  https://demo.api-platform.com ./tmp/react && ./lib/index.js https://demo.api-platform.com ./tmp/react-native -g react-native && ./lib/index.js https://demo.api-platform.com ./tmp/vue -g vue",
+    "test-gen-env": "rm -rf ./tmp && npm run build && API_PLATFORM_CLIENT_GENERATOR_ENTRYPOINT=https://demo.api-platform.com API_PLATFORM_CLIENT_GENERATOR_OUTPUT=./tmp ./lib/index.js"
   },
   "bin": {
-    "api-platform-generate-crud": "./lib/index.js"
+    "generate-api-platform-client": "./lib/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
