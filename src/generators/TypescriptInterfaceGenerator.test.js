@@ -1,6 +1,4 @@
-import Api from "@api-platform/api-doc-parser/lib/Api";
-import Resource from "@api-platform/api-doc-parser/lib/Resource";
-import Field from "@api-platform/api-doc-parser/lib/Field";
+import { Api, Resource, Field } from "@api-platform/api-doc-parser/lib";
 import fs from "fs";
 import tmp from "tmp";
 import TypescriptInterfaceGenerator from "./TypescriptInterfaceGenerator";
@@ -55,7 +53,6 @@ test("Generate a typescript interface", () => {
   foo: any;
   foobar?: string[];
   readonly bar: string;
-  id?: string;
 }
 `;
   expect(
@@ -106,7 +103,6 @@ test("Generate a typescript interface without references to other interfaces", (
   '@id'?: string;
   foo: any;
   readonly bar: string;
-  id?: string;
 }
 `;
   expect(

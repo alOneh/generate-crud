@@ -1,6 +1,4 @@
-import Api from "@api-platform/api-doc-parser/lib/Api";
-import Resource from "@api-platform/api-doc-parser/lib/Resource";
-import Field from "@api-platform/api-doc-parser/lib/Field";
+import { Api, Resource, Field } from "@api-platform/api-doc-parser/lib";
 import fs from "fs";
 import tmp from "tmp";
 import VueGenerator from "./VueGenerator";
@@ -51,9 +49,6 @@ test("Generate a Vue app", () => {
   ["create", "delete", "list", "show", "update"].forEach(action => {
     expect(
       fs.existsSync(`${tmpobj.name}/store/modules/foo/${action}/actions.js`)
-    ).toBe(true);
-    expect(
-      fs.existsSync(`${tmpobj.name}/store/modules/foo/${action}/getters.js`)
     ).toBe(true);
     expect(
       fs.existsSync(`${tmpobj.name}/store/modules/foo/${action}/index.js`)

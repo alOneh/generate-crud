@@ -1,20 +1,11 @@
-import fetch from '../../../../utils/fetch';
-import * as types from './mutation_types';
+import { delCommon, resetCommon } from '../../../../common/store/delete/actions';
+import { ENTRYPOINT } from "../../../../config/{{{hashEntry}}}_entrypoint";
 
-export const del = ({ commit }, item) => {
-  commit(types.{{{uc}}}_DELETE_TOGGLE_LOADING);
+export default function(types) {
+  const del = (context, item) => delCommon(context, { item, ep: ENTRYPOINT }, { types });
+  const reset = context => {
+    resetCommon(context, { types });
+  };
 
-  return fetch(item['@id'], { method: 'DELETE' })
-    .then(() => {
-      commit(types.{{{uc}}}_DELETE_TOGGLE_LOADING);
-      commit(types.{{{uc}}}_DELETE_SET_DELETED, item);
-    })
-    .catch(e => {
-      commit(types.{{{uc}}}_DELETE_TOGGLE_LOADING);
-      commit(types.{{{uc}}}_DELETE_SET_ERROR, e.message);
-    });
-};
-
-export const reset = ({ commit }) => {
-  commit(types.{{{uc}}}_DELETE_RESET);
-};
+  return { del, reset };
+}

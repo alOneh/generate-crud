@@ -1,5 +1,2 @@
-export default {
-  isLoading: false,
-  error: '',
-  deleted: null,
-};
+import makeState from '../../../../common/store/delete/state';
+export default makeState();

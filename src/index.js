@@ -4,6 +4,7 @@ import "isomorphic-fetch";
 import program from "commander";
 import parseHydraDocumentation from "@api-platform/api-doc-parser/lib/hydra/parseHydraDocumentation";
 import parseSwaggerDocumentation from "@api-platform/api-doc-parser/lib/swagger/parseSwaggerDocumentation";
+import parseOpenApi3Documentation from "@api-platform/api-doc-parser/lib/openapi3/parseOpenApi3Documentation";
 import { version } from "../package.json";
 import generators from "./generators";
 
@@ -22,6 +23,9 @@ program
     "The hydra prefix used by the API",
     "hydra:"
   )
+  .option("--username [username]", "Username for basic auth (Hydra only)")
+  .option("--password [password]", "Password for basic auth (Hydra only)")
+  .option("--bearer [bearer]", "Token for bearer auth (Hydra only)")
   .option(
     "-g, --generator [generator]",
     'The generator to use, one of "react", "react-native", "vue", "admin-on-rest", "typescript", "next"',
@@ -66,12 +70,26 @@ const resourceToGenerate = program.resource
 const serverPath = program.serverPath ? program.serverPath.toLowerCase() : null;
 
 const parser = entrypointWithSlash => {
-  const parseDocumentation =
-    "swagger" === program.format
-      ? parseSwaggerDocumentation
-      : parseHydraDocumentation;
-
-  return parseDocumentation(entrypointWithSlash);
+  const options = {};
+  if (program.username && program.password) {
+    const encoded = Buffer.from(
+      `${program.username}:${program.password}`
+    ).toString("base64");
+    options.headers = new Headers();
+    options.headers.set("Authorization", `Basic ${encoded}`);
+  }
+  if (program.bearer) {
+    options.headers = new Headers();
+    options.headers.set("Authorization", `Bearer ${program.bearer}`);
+  }
+  switch (program.format) {
+    case "swagger":
+      return parseSwaggerDocumentation(entrypointWithSlash);
+    case "openapi3":
+      return parseOpenApi3Documentation(entrypointWithSlash);
+    default:
+      return parseHydraDocumentation(entrypointWithSlash, options);
+  }
 };
 
 // check generator dependencies

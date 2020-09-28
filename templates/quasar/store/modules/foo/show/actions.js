@@ -1,21 +1,12 @@
-import fetch from '../../../../utils/fetch';
-import * as types from './mutation_types';
+import { retrieveCommon, resetCommon } from '../../../../common/store/show/actions';
+import { ENTRYPOINT } from "../../../../config/{{{hashEntry}}}_entrypoint";
 
-export const retrieve = ({ commit }, id) => {
-  commit(types.{{{uc}}}_SHOW_TOGGLE_LOADING);
+export default function(types) {
+  const retrieve = (context, id) => retrieveCommon(context, { id, ep: ENTRYPOINT }, { types });
 
-  return fetch(id)
-    .then(response => response.json())
-    .then(data => {
-      commit(types.{{{uc}}}_SHOW_TOGGLE_LOADING);
-      commit(types.{{{uc}}}_SHOW_SET_RETRIEVED, data);
-    })
-    .catch(e => {
-      commit(types.{{{uc}}}_SHOW_TOGGLE_LOADING);
-      commit(types.{{{uc}}}_SHOW_SET_ERROR, e.message);
-    });
-};
+  const reset = context => {
+    resetCommon(context, { types });
+  };
 
-export const reset = ({ commit }) => {
-  commit(types.{{{uc}}}_SHOW_RESET);
-};
+  return { retrieve, reset };
+}

@@ -1,52 +1,15 @@
-import SubmissionError from '../../../../error/SubmissionError';
-import fetch from '../../../../utils/fetch';
-import * as types from './mutation_types';
+import { resetCommon, retrieveCommon, updateCommon } from '../../../../common/store/update/actions';
+import { ENTRYPOINT } from "../../../../config/{{{hashEntry}}}_entrypoint";
 
-export const reset = ({ commit }) => {
-  commit(types.RESET);
-};
+export default function(types) {
+  const reset = context => {
+    resetCommon(context, { types });
+  };
 
-export const retrieve = ({ commit }, id) => {
-  commit(types.TOGGLE_LOADING);
+  const retrieve = (context, id) =>
+    retrieveCommon(context, { id, ep: ENTRYPOINT }, { types });
+  const update = (context, values) =>
+    updateCommon(context, { values, ep: ENTRYPOINT }, { types });
 
-  return fetch(id)
-    .then(response => response.json())
-    .then(data => {
-      commit(types.TOGGLE_LOADING);
-      commit(types.SET_RETRIEVED, data);
-    })
-    .catch(e => {
-      commit(types.TOGGLE_LOADING);
-      commit(types.SET_ERROR, e.message);
-    });
-};
-
-export const update = ({ commit, state }, values) => {
-  commit(types.SET_ERROR, '');
-  commit(types.TOGGLE_LOADING);
-
-  return fetch(state.retrieved['@id'], {
-    method: 'PUT',
-    headers: new Headers({ 'Content-Type': 'application/ld+json' }),
-    body: JSON.stringify(values),
-  })
-    .then(response => response.json())
-    .then(data => {
-      commit(types.TOGGLE_LOADING);
-      commit(types.SET_UPDATED, data);
-    })
-    .catch(e => {
-      commit(types.TOGGLE_LOADING);
-
-      if (e instanceof SubmissionError) {
-        commit(types.SET_VIOLATIONS, e.errors);
-        // eslint-disable-next-line
-        commit(types.SET_ERROR, e.errors._error);
-
-        return;
-      }
-
-      // eslint-disable-next-line
-      commit(commit(types.SET_ERROR, e.errors._error));
-    });
-};
+  return { reset, retrieve, update };
+}

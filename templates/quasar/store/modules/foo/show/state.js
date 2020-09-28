@@ -1,5 +1,2 @@
-export default {
-  error: '',
-  isLoading: false,
-  retrieved: null,
-};
+import makeState from '../../../../common/store/show/state';
+export default makeState();

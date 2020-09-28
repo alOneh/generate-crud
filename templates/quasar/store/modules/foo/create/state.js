@@ -1,6 +1,2 @@
-export default {
-  isLoading: false,
-  error: '',
-  created: null,
-  violations: null,
-};
+import makeState from '../../../../common/store/create/state';
+export default makeState();

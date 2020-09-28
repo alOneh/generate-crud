@@ -1,8 +1,2 @@
-export default {
-  error: '',
-  isLoading: false,
-  items: [],
-  view: [],
-  totalItems: 10,
-  selectItems: null,
-};
+import makeState from "../../../../common/store/list/state";
+export default makeState();
